@@ -1,4 +1,4 @@
-/** @format */
+
 
 import PageTitle from "@/components/PageTitle";
 import Image from "next/image";
@@ -9,27 +9,27 @@ import SalesCard, { SalesProps } from "@/components/SalesCard";
 
 const cardData: CardProps[] = [
   {
-    label: "Total Revenue",
-    amount: "$45,231.89",
-    discription: "+20.1% from last month",
+    label: "Total Report",
+    amount: "9",
+    discription: "Last 30 days",
     icon: DollarSign
   },
   {
-    label: "Subscriptions",
-    amount: "+2350",
-    discription: "+180.1% from last month",
+    label: "Total Users",
+    amount: "40",
+    discription: "Last 30 days",
     icon: Users
   },
   {
     label: "Sales",
-    amount: "+12,234",
-    discription: "+19% from last month",
+    amount: "+34",
+    discription: "Last 30 days",
     icon: CreditCard
   },
   {
     label: "Active Now",
-    amount: "+573",
-    discription: "+201 since last hour",
+    amount: "3",
+    discription: "last hour",
     icon: Activity
   }
 ];
@@ -83,7 +83,7 @@ export default function Home() {
 
           <BarChart />
         </CardContent>
-        <CardContent className="flex justify-between gap-4">
+        {/* <CardContent className="flex justify-between gap-4">
           <section>
             <p>Recent Sales</p>
             <p className="text-sm text-gray-400">
@@ -98,7 +98,7 @@ export default function Home() {
               saleAmount={d.saleAmount}
             />
           ))}
-        </CardContent>
+        </CardContent> */}
 
         {/*  */}
       </section>

@@ -2,8 +2,10 @@
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+
 import { cn } from "@/lib/utils";
+import SideNavbar from "@/components/SideNavbar";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,19 +22,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-   className={cn(
-          "min-h-screen w-full bg-slate-50 text-black  ",
+        className={cn(
+          "min-h-screen w-full bg-white text-black flex  ",
           inter.className,
           {
             "debug-screens": process.env.NODE_ENV === "development"
           }
         )}
       >
-  
-           
+        {/* sidebar */}
+        {/* <p className="border">Sidebar</p> */}
+        <SideNavbar  />
+        {/* main page */}
+        <div className="p-8 w-full ">
+               <Header />
           {
      
-          children}
+          children}</div>
       </body>
     </html>
   );

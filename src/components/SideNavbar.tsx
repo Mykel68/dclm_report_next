@@ -14,6 +14,8 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Button } from "./ui/button";
+import Logo from '@/assets/logo.png'
+import Image from 'next/image'
 
 import { useWindowWidth } from "@react-hook/window-size";
 
@@ -28,9 +30,10 @@ export default function SideNavbar({}: Props) {
   }
 
   return (
-    <div className="relative min-w-[80px] border-r px-3  pb-10 pt-24 ">
+    <div className="relative  min-w-[200px] border-r px-3  pb-10 pt-10 ">
+       
       {!mobileWidth && (
-        <div className="absolute right-[-20px] top-7">
+        <div className="absolute right-[-20px] top-7 ">
           <Button
             onClick={toggleSidebar}
             variant="secondary"
@@ -40,33 +43,46 @@ export default function SideNavbar({}: Props) {
           </Button>
         </div>
       )}
+     <div className='flex  items-center justify-center gap-1 mb-3'>
+        <Image src={Logo} alt="logo" style={{width: 70, height: 70}} className=" 
+          "/>
+        {/* <p className="text-sm font-bold ">
+          DCLM 
+        </p> */}
+    </div>
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
         links={[
           {
-            title: "Dashboard",
-            href: "/",
+            title: "Home",
+            href: "/home",
             icon: LayoutDashboard,
             variant: "default"
           },
-          {
-            title: "Users",
-            href: "/users",
-            icon: UsersRound,
-            variant: "ghost"
+             {
+            title: "Report",
+            href: "/reports",
+            icon: LayoutDashboard,
+            variant: "default"
           },
-          {
-            title: "Ordrs",
-            href: "/orders",
-            icon: ShoppingCart,
-            variant: "ghost"
-          },
-          {
-            title: "Settings",
-            href: "/settings",
-            icon: Settings,
-            variant: "ghost"
-          }
+          // {
+          //   title: "Users",
+          //   href: "/users",
+          //   icon: UsersRound,
+          //   variant: "ghost"
+          // },
+          // {
+          //   title: "Ordrs",
+          //   href: "/orders",
+          //   icon: ShoppingCart,
+          //   variant: "ghost"
+          // },
+          // {
+          //   title: "Settings",
+          //   href: "/settings",
+          //   icon: Settings,
+          //   variant: "ghost"
+          // }
         ]}
       />
     </div>
