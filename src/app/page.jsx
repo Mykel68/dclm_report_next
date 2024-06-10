@@ -1,22 +1,17 @@
-
 "use client";
 import React, { useState } from "react";
-
-
-import Banner from "@/components/Banner";
 import axios from "axios";
 import { toast } from "sonner";
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-
-import Logo from '@/assets/logo.png'
-import Img from '@/assets/image.jpg'
+import Logo from "@/assets/logo.png";
+import Img from "@/assets/image.jpg";
 
 export default function Dashboard() {
-       const serviceOptions = [
+  const serviceOptions = [
     {
       service: "Monday Bible Study",
     },
@@ -70,7 +65,7 @@ export default function Dashboard() {
   const [challengesAdded, setChallengesAdded] = useState(false);
 
   const validateForm = () => {
-    let valid = true;
+    let valid = false;
     const newErrors = {};
 
     // Example validation for 'date' field
@@ -147,7 +142,8 @@ export default function Dashboard() {
       subService: null,
       subServiceDay: null,
     }));
-  };   
+  };
+
   const handleSubOptionChange = (e) => {
     setFormData(() => ({ ...formData, subServiceDay: e.target.value }));
   };
@@ -200,7 +196,7 @@ export default function Dashboard() {
     if (validateForm()) {
       try {
         const response = await axios.post(
-          `http://localhost:5000/api/report/`,
+          `http://localhost:5000/api/report`,
           formData
         );
 
@@ -236,378 +232,314 @@ export default function Dashboard() {
       console.log("Form validation failed");
     }
   };
-
   return (
-  <div className="w-full lg:grid h-screen lg:grid-cols-2 lg:fixed" >
-      <div className="hidden lg:flex items-center justify-center h-screen" >
-        
-
-        <Image
-          src={Img}
-          alt="Image"
-
-          className=" w-full h-full opacity-80  object-cover dark:brightness-[0.2] dark:grayscale " 
-        />
+    <div className=" grid grid-cols-2 items-center ">
+      <div className="">
+        <div className="hidden lg:flex items-center justify-center h-screen ">
+          <Image
+            src={Img}
+            alt="Image"
+            className=" w-full min-h-screen opacity-80  object-cover dark:brightness-[0.2] dark:grayscale "
+          />
+        </div>
+        <div className="hidden lg:flex item-center justify-center absolute top-[30vh] left-[20vw]">
+          <Image
+            src={Logo}
+            alt="Image"
+            width={200}
+            className="  object-cover  "
+          />
+        </div>
       </div>
-      <div className="hidden lg:flex item-center justify-center absolute top-[30vh] left-[20vw]">
-           <Image
-          src={Logo}
-          alt="Image"
-width={200}
-          className="  object-cover  " 
-        />
-</div>
-     
+
       <div className="flex  flex-col items-center justify-center  ">
-        <div className="flex items-center justify-center py-5 " >
-          <div className="mx-auto grid w-full max-w-md gap-3 p-2 rounded-xl">
-            <div className="grid gap-2 text-center">
-               <Image
-          src={Logo}
-          alt="Image"
-width={50}
-          className=" lg:hidden object-cover  " 
-        />
-            <h1 className="text-3xl font-bold">DCLM Report</h1>
-            <p className="text-balance text-muted-foreground">
-   Please fill in the report feilds
-            </p>
-          </div>
-          
-     
-        <div className="flex min-h-screen  flex-col items-center  w-full p-2 md:p-3">
+        <div className="flex items-center justify-center  ">
+          <div className="mx-auto grid w-full max-w-md gap-1 p-2 ">
+            <div className="grid gap-2 text-center place-items-center">
+              <Image
+                src={Logo}
+                alt="Image"
+                width={50}
+                className=" lg:hidden object-cover  "
+              />
+              <h1 className="text-2xl font-bold">DCLM Report</h1>
+              <p className="text-balance text-muted-foreground">
+                Please fill in the report feilds
+              </p>
+            </div>
 
-       <form
-         onSubmit={handleSubmit}
-         className="  rounded w-full max-w-[800px] flex flex-col gap-2 "
-       >
-         <div className="grid items-center gap-2">
-           <Label htmlFor="date">Date</Label>
-           <Input
-             type="date"
-             placeholder="Pick date"
-             name="date"
-             value={formData.date}
-             onChange={handleInputChange}
-             className=""
-           />
-           {errors.date && <Label className="text-red-500">{errors.date}</Label>}
-         </div>
-{/* 
-         <div className="gtid items-center">
-           <Label htmlFor="serviceType">Service Type</Label>
-           <fieldset className="grid items-center ">
-             {serviceOptions.map((e) => {
-               return (
-                 <div key={e.service} className="">
-                   <div key={e.service} className="bg-background">
-                     <div className="p-1">
-                       <input
-                         className="form-check-input"
-                         type="radio"
-                         name="ServiceType"
-                         id="option1"
-                         value={e.service}
-                         onChange={handleServiceTypeChange}
-                         checked={formData.serviceType === e.service}
-                       />
-                       <Label className="m-1" htmlFor="option1">
-                         {e.service}
-                       </Label>
-                     </div>
-                     {e.subService && formData.serviceType === e.service
-                       ? e.subService.map((e) => {
-                           return (
-                             <div
-                               className="form-check"
-                               style={{ marginLeft: "15px" }}
-                               key={e.subServiceName}
-                             >
-                               <input
-                                 className="form-check-input"
-                                 type="radio"
-                                 name="additionalOptions"
-                                 id="option1"
-                                 value={e.subServiceName}
-                                 onChange={handleAdditionalOptionChange}
-                                 checked={
-                                   formData.subService === e.subServiceName
-                                 }
-                               />
-                               <Label className="m-1" htmlFor="option1">
-                                 {e.subServiceName}
-
-                               </Label>
-                               {e.subServiceDay &&
-                               e.subServiceName === formData.subService
-                                 ? e.subServiceDay.map((e) => {
-                                     return (
-                                       <div
-                                         className="form-check"
-                                         key={e.subServiceDay}
-                                       >
-                                         <input
-                                           className="form-check-input"
-                                           type="radio"
-                                           name="subsub"
-                                           id="option1"
-                                           value={e}
-                                           onChange={handleSubOptionChange}
-                                           checked={formData.subServiceDay === e}
-                                         />
-                                         <Label
-                                           className="m-1"
-                                           htmlFor="option1"
-                                         >
-                                           {e}
-                                         </Label>
-                                       </div>
-                                     );
-                                   })
-                                 : null}
-                             </div>
-                           );
-                         })
-                       : null}
-                   </div>
-                 </div>
-               );
-             })}
-           </fieldset>
-           {errors.serviceType && (
-             <Label className="text-red-500">{errors.serviceType}</Label>
-           )}
-         </div> */}
+            <div className="flex   flex-col items-center  w-full p-2 md:p-3">
+              <form
+                onSubmit={handleSubmit}
+                className="  rounded w-full max-w-[800px] flex flex-col gap-4 "
+              >
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input
+                    type="date"
+                    placeholder="Pick date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    className=""
+                  />
+                  {errors.date && (
+                    <Label className="text-red-500">{errors.date}</Label>
+                  )}
+                </div>
 
                 <div className="grid items-center gap-2">
-  <Label htmlFor="serviceType">Service Type</Label>
-  <select
-    id="serviceType"
-    name="serviceType"
-    value={formData.serviceType}
-    onChange={handleServiceTypeChange}
-    className="w-full py-2 px-3 rounded-md"
-  >
-    <option value="">Select Service Type</option>
-    {serviceOptions.map((option) => (
-      <option key={option.service} value={option.service}>
-        {option.service}
-      </option>
-    ))}
-  </select>
-  {errors.serviceType && (
-    <Label className="text-red-500">{errors.serviceType}</Label>
-  )}
-</div>
-
-{formData.serviceType === "Global Crusade With Kumuyi" && (
-  <div className="lg:flex items-center gap-2">
-    <div className="grid items-center gap-2">
-      <Label htmlFor="subService">Sub Service</Label>
-      <select
-        id="subService"
-        name="subService"
-        value={formData.subService}
-        onChange={handleAdditionalOptionChange}
-        className="w-full py-2 px-3 rounded-md"
-      >
-        <option value="">Select Sub Service</option>
-        {serviceOptions
-          .find((option) => option.service === formData.serviceType)
-          ?.subService.map((subOption) => (
-            <option key={subOption.subServiceName} value={subOption.subServiceName}>
-              {subOption.subServiceName}
-            </option>
-          ))}
-      </select>
-    </div>
-
-    {formData.subService !== "Impact" && formData.subService && (
-      <div className="grid items-center gap-2">
-        <Label htmlFor="subServiceDay">Sub Service Day</Label>
-        <select
-          id="subServiceDay"
-          name="subServiceDay"
-          value={formData.subServiceDay}
-          onChange={handleSubOptionChange}
-          className="w-full py-2 px-3 rounded-md"
-        >
-          <option value="">Select Sub Service Day</option>
-          {serviceOptions
-            .find((option) => option.service === formData.serviceType)
-            ?.subService.find((subOption) => subOption.subServiceName === formData.subService)
-            ?.subServiceDay.map((subServiceDay) => (
-              <option key={subServiceDay} value={subServiceDay}>
-                {subServiceDay}
-              </option>
-            ))}
-        </select>
-      </div>
-    )}
-  </div>
-)}
-
-
-         <div className="grid items-center gap-2">
-           <Label htmlFor="section">Section</Label>
-           <select
-             id="section"
-             name="section"
-             value={formData.section}
-             onChange={handleInputChange}
-             className="w-full py-2 px-3 rounded-md"
-           >
-             <option value="">Select your section...</option>
-             <option value="Zoom and Playback">Zoom and Playback</option>
-             <option value="Teleprompting">Teleprompting</option>
-             <option value="Video">Video</option>
-             <option value="Audio">Audio</option>
-             <option value="Streaming">Streaming</option>
-             <option value="Uplink">Uplink</option>
-             <option value="Graphics">Graphics</option>
-           </select>
-           {errors.section && (
-             <Label className="text-red-500">{errors.section}</Label>
-           )}
+                  <Label htmlFor="serviceType">Service Type</Label>
+                  <select
+                    id="serviceType"
+                    name="serviceType"
+                    value={formData.serviceType}
+                    onChange={handleServiceTypeChange}
+                    className="w-full py-2   rounded-md text-xs"
+                  >
+                    <option value="" className="">
+                      Select Service Type
+                    </option>
+                    {serviceOptions.map((option) => (
+                      <option key={option.service} value={option.service}>
+                        {option.service}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.serviceType && (
+                    <Label className="text-red-500">{errors.serviceType}</Label>
+                  )}
                 </div>
-                
-                     
-                     <div className="grid items-center gap-2">
-           <Label htmlFor="challenges">Challenges Encountered</Label>
-           {formData.challenges.map((challenge, index) => (
-             <div key={index} className="flex items-center gap-3">
-               <Input
-                 type="text"
-                 placeholder={`Challenge ${index + 1}`}
-                 value={challenge}
-                 onChange={(e) =>
-                   handleChallengeInputChange(index, e.target.value)
-                 }
-                 required={index === 0} 
-               />
-                 <Button type="button" variant='destructive' onClick={handleAdd}>
-             Add 
-           </Button>
 
-               {/* Show remove button only for additional challenges */}
-               {index > 0 && (
-                 <Button
-                   type="button"
-                   onClick={() => handleRemoveChallenge(index)}
-                 >
-                   Remove
-                 </Button>
-               )}
-             </div>
-           ))}
-           {errors.challenges && (
-             <Label className="text-red-500">{errors.challenges}</Label>
-           )}
-         
-         </div>
+                {formData.serviceType === "Global Crusade With Kumuyi" && (
+                  <div className="lg:flex items-center gap-2">
+                    <div className="grid items-center gap-2">
+                      <Label htmlFor="subService">Sub Service</Label>
+                      <select
+                        id="subService"
+                        name="subService"
+                        value={formData.subService}
+                        onChange={handleAdditionalOptionChange}
+                        className="w-full py-2 px-3 rounded-md text-xs"
+                      >
+                        <option value="">Select Sub Service</option>
+                        {serviceOptions
+                          .find(
+                            (option) => option.service === formData.serviceType
+                          )
+                          ?.subService.map((subOption) => (
+                            <option
+                              key={subOption.subServiceName}
+                              value={subOption.subServiceName}
+                            >
+                              {subOption.subServiceName}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
 
-                <div className="md:flex md:gap-3">
-                  
-              <div className="grid items-center gap-2 ">
-           <Label htmlFor="supervisor">Supervisor on Duty</Label>
-           <Input
-             type="text"
-             name="supervisor"
-             value={formData.supervisor}
-             onChange={handleInputChange}
-           />
-           {errors.supervisor && (
-             <Label className="text-red-500">{errors.supervisor}</Label>
-           )}
-         </div>
-
-         <div className="grid items-center gap-2">
-           <Label htmlFor="personnelCount">Number of Personnel on Duty</Label>
-           <Input
-             type="number"
-             name="personnelCount"
-             value={formData.personnelCount}
-             onChange={handleInputChange}
-           />
-           {errors.personnelCount && (
-             <Label className="text-red-500">{errors.personnelCount}</Label>
-           )}
-         </div>        
-</div>
-     
-                <div className="lg:flex gap-3">
-                  <div className="grid items-center gap-2">
-           <Label htmlFor="volunteerCount">Number of Volunteers on Duty</Label>
-           <Input
-             type="number"
-             name="volunteerCount"
-             value={formData.volunteerCount}
-             onChange={handleInputChange}
-           />
-           {errors.volunteerCount && (
-             <Label className="text-red-500">{errors.volunteerCount}</Label>
-           )}
-         </div>
-
-               
-         <div className="grid items-center gap-2">
-           <Label htmlFor="solution">Solution Proposed</Label>
-           <Input
-             type="text"
-             name="solution"
-             value={formData.solution}
-             onChange={handleInputChange}
-           />
-           {errors.solution && (
-             <Label className="text-red-500">{errors.solution}</Label>
-           )}
-         </div>
-</div>
-         
-    
-
-
-                <div className="lg:flex gap-3">
-                  <div className="grid items-center gap-2">
-           <Label htmlFor="remarks">Remarks and Recommendations</Label>
-           <Input
-             type="text"
-             name="remarks"
-             value={formData.remarks}
-             onChange={handleInputChange}
-           />
-           {errors.remarks && (
-             <Label className="text-red-500">{errors.remarks}</Label>
-           )}
+                    {formData.subService !== "Impact" &&
+                      formData.subService && (
+                        <div className="grid items-center gap-2">
+                          <Label htmlFor="subServiceDay">Sub Service Day</Label>
+                          <select
+                            id="subServiceDay"
+                            name="subServiceDay"
+                            value={formData.subServiceDay}
+                            onChange={handleSubOptionChange}
+                            className="w-full py-2 px-10 rounded-md text-xs"
+                          >
+                            <option value="">Select Sub Service Day</option>
+                            {serviceOptions
+                              .find(
+                                (option) =>
+                                  option.service === formData.serviceType
+                              )
+                              ?.subService.find(
+                                (subOption) =>
+                                  subOption.subServiceName ===
+                                  formData.subService
+                              )
+                              ?.subServiceDay.map((subServiceDay) => (
+                                <option
+                                  key={subServiceDay}
+                                  value={subServiceDay}
+                                >
+                                  {subServiceDay}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                      )}
                   </div>
-                     <div className="grid items-center gap-2">
-           <Label htmlFor="location">Location</Label>
-           <Input
-             type="text"
-             name="location"
-             value={formData.location}
-             onChange={handleInputChange}
-           />
-           {errors.location && (
-             <Label className="text-red-500">{errors.location}</Label>
-           )}
-         </div>
-        </div>
+                )}
 
-         
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="section">Section</Label>
+                  <select
+                    id="section"
+                    name="section"
+                    value={formData.section}
+                    onChange={handleInputChange}
+                    className=" py-3 p-7 rounded-md text-xs"
+                  >
+                    <option value="">Select your section...</option>
+                    <option value="Zoom and Playback">Zoom and Playback</option>
+                    <option value="Teleprompting">Teleprompting</option>
+                    <option value="Video">Video</option>
+                    <option value="Audio">Audio</option>
+                    <option value="Streaming">Streaming</option>
+                    <option value="Uplink">Uplink</option>
+                    <option value="Graphics">Graphics</option>
+                  </select>
+                  {errors.section && (
+                    <Label className="text-red-500">{errors.section}</Label>
+                  )}
+                </div>
+                {/* supervisor */}
+                <div className="grid items-center gap-2 ">
+                  <Label htmlFor="supervisor">Supervisor on Duty</Label>
+                  <Input
+                    type="text"
+                    name="supervisor"
+                    value={formData.supervisor}
+                    onChange={handleInputChange}
+                  />
+                  {errors.supervisor && (
+                    <Label className="text-red-500">{errors.supervisor}</Label>
+                  )}
+                </div>
 
-           
-      
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="challenges">Challenges Encountered</Label>
+                  {formData.challenges.map((challenge, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <Input
+                        type="text"
+                        placeholder={`Challenge ${index + 1}`}
+                        value={challenge}
+                        onChange={(e) =>
+                          handleChallengeInputChange(index, e.target.value)
+                        }
+                        required={index === 0}
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={handleAdd}
+                      >
+                        Add
+                      </Button>
 
-         <Button type="submit">Submit</Button>
-       </form>
-     </div>
+                      {/* Show remove button only for additional challenges */}
+                      {index > 0 && (
+                        <Button
+                          type="button"
+                          onClick={() => handleRemoveChallenge(index)}
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  {errors.challenges && (
+                    <Label className="text-red-500">{errors.challenges}</Label>
+                  )}
+                </div>
+
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="equipmentDetails">Equipment Details</Label>
+                  <Input
+                    type="text"
+                    name="equipmentDetails"
+                    value={formData.equipmentDetails}
+                    onChange={handleInputChange}
+                  />
+                  {errors.equipmentDetails && (
+                    <Label className="text-red-500">
+                      {errors.equipmentDetails}
+                    </Label>
+                  )}
+
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="personnelCount">
+                      Number of Personnel on Duty
+                    </Label>
+                    <Input
+                      type="number"
+                      name="personnelCount"
+                      value={formData.personnelCount}
+                      onChange={handleInputChange}
+                    />
+                    {errors.personnelCount && (
+                      <Label className="text-red-500">
+                        {errors.personnelCount}
+                      </Label>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="volunteerCount">
+                    Number of Volunteers on Duty
+                  </Label>
+                  <Input
+                    type="number"
+                    name="volunteerCount"
+                    value={formData.volunteerCount}
+                    onChange={handleInputChange}
+                  />
+                  {errors.volunteerCount && (
+                    <Label className="text-red-500">
+                      {errors.volunteerCount}
+                    </Label>
+                  )}
+
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="solution">Solution Proposed</Label>
+                    <Input
+                      type="text"
+                      name="solution"
+                      value={formData.solution}
+                      onChange={handleInputChange}
+                    />
+                    {errors.solution && (
+                      <Label className="text-red-500">{errors.solution}</Label>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="remarks">Remarks and Recommendations</Label>
+                  <Input
+                    type="text"
+                    name="remarks"
+                    value={formData.remarks}
+                    onChange={handleInputChange}
+                  />
+                  {errors.remarks && (
+                    <Label className="text-red-500">{errors.remarks}</Label>
+                  )}
+                </div>
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                  />
+                  {errors.location && (
+                    <Label className="text-red-500">{errors.location}</Label>
+                  )}
+                </div>
+
+                <Button type="submit">Submit</Button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-              
-      </div>
-     
- 
-  )
+  );
 }
