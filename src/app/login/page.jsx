@@ -9,6 +9,7 @@ import Logo from "@/assets/logo.png";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -31,10 +32,10 @@ export default function Dashboard() {
       if (response.status === 200) {
         toast.success("Logged in successfully");
 
-        //set the token in local storage
-        localStorage.setItem("token", response.data.token);
+        // Save the token to a cookie
+        Cookies.set("token", response.data.token, { expires: 7 }); // Expires in 7 days
 
-        //redirect to dashboard
+        // Redirect to dashboard
         router.push("/home");
       } else {
         toast.error("Error logging in");

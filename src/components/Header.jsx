@@ -14,15 +14,23 @@ import { Button } from "@/components/ui/button";
 import { Search, CircleUser } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const Header = () => {
   const router = useRouter();
-  const Logout = () => {
-    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}api/auth/logout`);
+  const Logout = async () => {
+    try {
+      // Make a request to log out the user
+      await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}api/auth/logout`);
 
-    localStorage.removeItem("token");
+      // Remove token from cookie
+      Cookies.remove("token");
 
-    router.push("/login");
+      // Redirect to login page
+      router.push("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
   return (
     <div className="flex  items-center justify-center gap-1 mb-3">
