@@ -34,7 +34,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/(admin)/home/reports/page.jsx",
-    "src/app/page.jsx"
+    "src/app/page.jsx",
+    "src/app/(admin)/home/page.jsx"
   ],
   "exclude": [
     "node_modules"

@@ -168,18 +168,32 @@ export default function Component() {
             </TableHeader>
             <TableBody>
               {reports.map((report) => (
-                <TableRow key={report.id}>
-                  <TableCell>{report.date}</TableCell>
-                  <TableCell className=" sm:table-cell">
+                <TableRow key={report.id} className=" hover:cursor-pointer">
+                  <TableCell onClick={() => openViewPopup(report)}>
+                    {report.date}
+                  </TableCell>
+                  <TableCell
+                    className=" sm:table-cell"
+                    onClick={() => openViewPopup(report)}
+                  >
                     {report.serviceType}
                   </TableCell>
-                  <TableCell className=" sm:table-cell">
+                  <TableCell
+                    className=" sm:table-cell"
+                    onClick={() => openViewPopup(report)}
+                  >
                     {report.section}
                   </TableCell>
-                  <TableCell className=" md:table-cell">
+                  <TableCell
+                    className=" md:table-cell"
+                    onClick={() => openViewPopup(report)}
+                  >
                     {report.supervisor}
                   </TableCell>
-                  <TableCell className=" md:table-cell">
+                  <TableCell
+                    className=" md:table-cell"
+                    onClick={() => openViewPopup(report)}
+                  >
                     {report.location}
                   </TableCell>
                   <TableCell className=" md:table-cell">
@@ -235,7 +249,7 @@ export default function Component() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Report Dialog */}
+      {/* Show Report Dialog */}
       <Dialog open={view} onOpenChange={setView}>
         <DialogTrigger asChild>
           {/* Trigger element is not needed here */}
@@ -325,7 +339,7 @@ function ReportTable({ report }) {
       results: reportDetail.volunteerCount,
     },
   ];
-  return <DataTable columns={columns} data={data} />;
+  return <DataTable columns={columns} data={data} className="h-50" />;
 }
 
 function ReportForm({ report, onSave }) {

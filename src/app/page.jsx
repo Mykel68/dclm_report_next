@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 
 import Logo from "@/assets/logo.png";
 import Img from "@/assets/image.jpg";
+import Link from "next/link";
 
 export default function Dashboard() {
   const serviceOptions = [
@@ -246,12 +247,12 @@ export default function Dashboard() {
 
   return (
     <div className="w-full lg:grid h-screen lg:grid-cols-2  ">
-      <div className="">
-        <div className="hidden lg:flex items-center justify-center h-screen ">
+      <div className=" bg-black">
+        <div className="hidden lg:flex items-center justify-center min-h-screen  ">
           <Image
             src={Img}
             alt="Image"
-            className=" w-1/2 fixed min-h-screen opacity-80  object-cover "
+            className=" w-1/2 fixed min-h-screen opacity-40  object-cover bg-black "
           />
         </div>
         <div className="hidden lg:flex item-center justify-center absolute top-[30vh] left-[20vw]">
@@ -553,6 +554,27 @@ export default function Dashboard() {
               </form>
             </div>
           </div>
+        </div>
+        <div className="bg-slate-300 p-2 flex items-center justify-between">
+          <div className="flex gap-0.5">
+            <Image
+              src={Logo}
+              alt="Image"
+              width={25}
+              className="  object-cover  "
+            />
+            <p className="text-lg font-semibold"> DCLM</p>
+          </div>
+
+          <p className="text-sm ">
+            <Link
+              href="/login"
+              className="underline hover:underline-offset-4 hover:text-blue-950"
+            >
+              Login
+            </Link>{" "}
+            as Admin
+          </p>
         </div>
       </div>
     </div>
