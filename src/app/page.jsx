@@ -65,10 +65,10 @@ export default function Dashboard() {
   const [challengesAdded, setChallengesAdded] = useState(false);
 
   const validateForm = () => {
-    let valid = false;
+    let valid = true;
     const newErrors = {};
 
-    // Example validation for 'date' field
+    // Date validation
     if (!formData.date) {
       newErrors.date = "Date is required";
       valid = false;
@@ -131,6 +131,10 @@ export default function Dashboard() {
       valid = false;
     }
 
+    if (!valid) {
+      console.log("Form validation errors:", newErrors);
+    }
+
     setErrors(newErrors);
     return valid;
   };
@@ -191,18 +195,25 @@ export default function Dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    // Format date to YYYY-MM-DD if formData.date is a valid date string
+    const formattedDate = formData.date
+      ? new Date(formData.date).toISOString().split("T")[0]
+      : null;
+
+    // Update formData with the formatted date
+    const updatedFormData = { ...formData, date: formattedDate };
+
+    console.log(updatedFormData);
 
     if (validateForm()) {
       try {
         const response = await axios.post(
           `http://localhost:5000/api/report`,
-          formData
+          updatedFormData
         );
 
         if (response.status === 201) {
           toast.success("Report submitted successfully");
-          // console.log(formData);
           // Reset form data after submission as null
           setFormData({
             date: " ",
@@ -232,14 +243,15 @@ export default function Dashboard() {
       console.log("Form validation failed");
     }
   };
+
   return (
-    <div className=" grid grid-cols-2 items-center ">
+    <div className="w-full lg:grid h-screen lg:grid-cols-2  ">
       <div className="">
         <div className="hidden lg:flex items-center justify-center h-screen ">
           <Image
             src={Img}
             alt="Image"
-            className=" w-full min-h-screen opacity-80  object-cover dark:brightness-[0.2] dark:grayscale "
+            className=" w-1/2 fixed min-h-screen opacity-80  object-cover "
           />
         </div>
         <div className="hidden lg:flex item-center justify-center absolute top-[30vh] left-[20vw]">
@@ -247,15 +259,15 @@ export default function Dashboard() {
             src={Logo}
             alt="Image"
             width={200}
-            className="  object-cover  "
+            className="  object-cover fixed "
           />
         </div>
       </div>
 
-      <div className="flex  flex-col items-center justify-center  ">
+      <div className="flex  flex-col   ">
         <div className="flex items-center justify-center  ">
-          <div className="mx-auto grid w-full max-w-md gap-1 p-2 ">
-            <div className="grid gap-2 text-center place-items-center">
+          <div className="mx-auto grid w-full max-w-md gap-1 p-2 py-6 ">
+            <div className="grid gap-2  text-center place-items-center">
               <Image
                 src={Logo}
                 alt="Image"
@@ -295,7 +307,7 @@ export default function Dashboard() {
                     name="serviceType"
                     value={formData.serviceType}
                     onChange={handleServiceTypeChange}
-                    className="w-full py-2   rounded-md text-xs"
+                    className="w-full py-3   rounded-md text-xs"
                   >
                     <option value="" className="">
                       Select Service Type
@@ -381,7 +393,7 @@ export default function Dashboard() {
                     name="section"
                     value={formData.section}
                     onChange={handleInputChange}
-                    className=" py-3 p-7 rounded-md text-xs"
+                    className=" py-3  rounded-md text-xs"
                   >
                     <option value="">Select your section...</option>
                     <option value="Zoom and Playback">Zoom and Playback</option>
@@ -421,15 +433,8 @@ export default function Dashboard() {
                         onChange={(e) =>
                           handleChallengeInputChange(index, e.target.value)
                         }
-                        required={index === 0}
+                        // required={index === 0}
                       />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        onClick={handleAdd}
-                      >
-                        Add
-                      </Button>
 
                       {/* Show remove button only for additional challenges */}
                       {index > 0 && (
@@ -438,6 +443,16 @@ export default function Dashboard() {
                           onClick={() => handleRemoveChallenge(index)}
                         >
                           Remove
+                        </Button>
+                      )}
+                      {/* Show add button only for first challenge challenges */}
+                      {index === 0 && (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={handleAdd}
+                        >
+                          Add
                         </Button>
                       )}
                     </div>

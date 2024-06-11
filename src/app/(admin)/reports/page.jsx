@@ -36,9 +36,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DataTable } from "@/components/DataTable";
 
 export default function Component() {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     date: "",
     serviceType: "",
     subService: "",
@@ -56,16 +57,17 @@ export default function Component() {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [open, setOpen] = React.useState(false);
+  const [view, setView] = React.useState(false);
   const [deletePopupOpen, setDeletePopupOpen] = React.useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(   `${process.env.NEXT_PUBLIC_BASE_URL}api/report/`
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/`
         );
         if (response.status === 200 && Array.isArray(response.data)) {
           setReports(response.data.reverse());
-      
         } else {
           console.error("Error fetching reports");
         }
@@ -73,13 +75,13 @@ export default function Component() {
         console.error("Error:", error);
       }
     };
-    fetchData();  }, []);
+    fetchData();
+  }, []);
   const handleDelete = async () => {
     try {
       if (selectedReport) {
         await axios.delete(
-          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/` +
-            selectedReport.id
+          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/` + selectedReport.id
         );
         setReports(reports.filter((report) => report.id !== selectedReport.id));
         setSelectedReport(null);
@@ -105,10 +107,10 @@ export default function Component() {
     setOpen(true);
   };
 
-
-    const handleShowReport = (report) => {
+  const openViewPopup = (report) => {
     setSelectedReport(report);
-    setOpen(true);
+    console.log(report);
+    setView(true);
   };
 
   const handleSaveChanges = async () => {
@@ -123,10 +125,9 @@ export default function Component() {
           supervisor: formData.supervisor,
           location: formData.location,
         };
-        console.log(updatedReport)
-        const response =  await axios.put(
-          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/` +
-            selectedReport.id
+        console.log(updatedReport);
+        const response = await axios.put(
+          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/` + selectedReport.id
         );
         if (response.status === 200) {
           // Update the reports state with the updated report
@@ -160,9 +161,7 @@ export default function Component() {
                 <TableHead>Date</TableHead>
                 <TableHead className=" sm:table-cell">Service</TableHead>
                 <TableHead className=" sm:table-cell">Section</TableHead>
-                <TableHead className=" md:table-cell">
-                  Supervisor
-                </TableHead>
+                <TableHead className=" md:table-cell">Supervisor</TableHead>
                 <TableHead className=" md:table-cell">Location</TableHead>
                 <TableHead className=" md:table-cell">Actions</TableHead>
               </TableRow>
@@ -197,9 +196,7 @@ export default function Component() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => handleShowReport(report)}
-                        >
+                        <DropdownMenuItem onClick={() => openViewPopup(report)}>
                           View
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -238,6 +235,20 @@ export default function Component() {
         </DialogContent>
       </Dialog>
 
+      {/* Edit Report Dialog */}
+      <Dialog open={view} onOpenChange={setView}>
+        <DialogTrigger asChild>
+          {/* Trigger element is not needed here */}
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle> Report Details</DialogTitle>
+            <DialogDescription>More Information about Report</DialogDescription>
+          </DialogHeader>
+          <ReportTable report={selectedReport} />
+        </DialogContent>
+      </Dialog>
+
       {/* Delete Popup Dialog */}
       <Dialog open={deletePopupOpen} onOpenChange={setDeletePopupOpen}>
         <DialogTrigger asChild>
@@ -263,6 +274,60 @@ export default function Component() {
     </>
   );
 }
+function ReportTable({ report }) {
+  const [reportDetail, setReportDetail] = useState(report);
+  const columns = [
+    {
+      accessorKey: "feilds",
+      header: "Feilds",
+    },
+    {
+      accessorKey: "results",
+      header: "Results",
+    },
+  ];
+  const data = [
+    // {
+    //   feilds: "Date",
+    //   results: reportDetail.date,
+    // },
+    {
+      feilds: "Section",
+      results: reportDetail.section,
+    },
+    {
+      feilds: " Type of Service",
+      results: reportDetail.serviceType,
+    },
+    {
+      feilds: " Type ",
+      results: reportDetail.subService,
+    },
+
+    {
+      feilds: " Service Day",
+      results: reportDetail.subServiceDay,
+    },
+    {
+      feilds: "Location",
+      results: reportDetail.location,
+    },
+    {
+      feilds: " Supervisor ",
+      results: reportDetail.supervisor,
+    },
+    {
+      feilds: "Number of Personnel ",
+      results: reportDetail.personnelCount,
+    },
+    {
+      feilds: "Number of Volunteer",
+      results: reportDetail.volunteerCount,
+    },
+  ];
+  return <DataTable columns={columns} data={data} />;
+}
+
 function ReportForm({ report, onSave }) {
   const [selectedReport, setSelectedReport] = useState(null);
 
@@ -279,39 +344,37 @@ function ReportForm({ report, onSave }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    if (selectedReport) {
-      const updatedReport = {
-        ...selectedReport,
-        serviceType: formData.serviceType,
-        section: formData.section,
-        supervisor: formData.supervisor,
-        location: formData.location,
-      };
-      const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/report/${selectedReport.id}`,
-        updatedReport
-      );
-      // if (response.status === 200) {
-      //   setReports(
-      //     reports.map((report) =>
-      //       report.id === selectedReport.id ? updatedReport : report
-      //     )
-      //   );
-      //   setSelectedReport(null);
-      //   setOpen(false);
-      // } else {
-      //   console.error("Error updating report");
-      // }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (selectedReport) {
+        const updatedReport = {
+          ...selectedReport,
+          serviceType: formData.serviceType,
+          section: formData.section,
+          supervisor: formData.supervisor,
+          location: formData.location,
+        };
+        const response = await axios.put(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/report/${selectedReport.id}`,
+          updatedReport
+        );
+        // if (response.status === 200) {
+        //   setReports(
+        //     reports.map((report) =>
+        //       report.id === selectedReport.id ? updatedReport : report
+        //     )
+        //   );
+        //   setSelectedReport(null);
+        //   setOpen(false);
+        // } else {
+        //   console.error("Error updating report");
+        // }
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-
+  };
 
   return (
     <form className={cn("grid items-start gap-4")} onSubmit={handleSubmit}>
