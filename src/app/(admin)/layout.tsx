@@ -29,10 +29,9 @@ export default function RootLayout({
             "debug-screens": process.env.NODE_ENV === "development",
           }
         )}
+        suppressHydrationWarning={true}
       >
         <div className="flex w-full">
-          {/* <p className="border">Sidebar</p> */}
-
           <SideNavbar />
 
           <div className="p-8 w-full">

@@ -254,7 +254,7 @@ export default function Component() {
         <DialogTrigger asChild>
           {/* Trigger element is not needed here */}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] h-50 overflow-auto">
           <DialogHeader>
             <DialogTitle> Report Details</DialogTitle>
             <DialogDescription>More Information about Report</DialogDescription>
@@ -339,7 +339,7 @@ function ReportTable({ report }) {
       results: reportDetail.volunteerCount,
     },
   ];
-  return <DataTable columns={columns} data={data} className="h-50" />;
+  return <DataTable columns={columns} data={data} className=" h-full" />;
 }
 
 function ReportForm({ report, onSave }) {

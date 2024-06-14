@@ -1,13 +1,13 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-// This function can be marked 'async' if using await inside
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   console.log("Request path:", path);
 
-  const isPublicPath = path === "/" || path === "/login";
+  const isPublicPath =
+    path === "/" || path === "/login" || path === "/register";
 
   console.log("Is public path:", isPublicPath);
 
@@ -27,5 +27,5 @@ export function middleware(request: NextRequest) {
 
 // Protected routes
 export const config = {
-  matcher: ["/profile", "/login", "/home", "/reports"],
+  matcher: ["/profile", "/login", "/home", "/reports", "/register"],
 };

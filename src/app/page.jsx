@@ -209,7 +209,7 @@ export default function Dashboard() {
     if (validateForm()) {
       try {
         const response = await axios.post(
-          `http://localhost:5000/api/report`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}api/report/`,
           updatedFormData
         );
 
@@ -308,7 +308,7 @@ export default function Dashboard() {
                     name="serviceType"
                     value={formData.serviceType}
                     onChange={handleServiceTypeChange}
-                    className="w-full py-3   rounded-md text-xs"
+                    className="w-full py-3   rounded-md text-xs bg-background border border-blue-950"
                   >
                     <option value="" className="">
                       Select Service Type
@@ -333,7 +333,7 @@ export default function Dashboard() {
                         name="subService"
                         value={formData.subService}
                         onChange={handleAdditionalOptionChange}
-                        className="w-full py-2 px-3 rounded-md text-xs"
+                        className="w-full py-2 px-3 rounded-md text-xs bg-background border border-blue-950"
                       >
                         <option value="">Select Sub Service</option>
                         {serviceOptions
@@ -360,7 +360,7 @@ export default function Dashboard() {
                             name="subServiceDay"
                             value={formData.subServiceDay}
                             onChange={handleSubOptionChange}
-                            className="w-full py-2 px-10 rounded-md text-xs"
+                            className="w-full py-2 px-10 rounded-md text-xs bg-background border border-blue-950"
                           >
                             <option value="">Select Sub Service Day</option>
                             {serviceOptions
@@ -394,7 +394,7 @@ export default function Dashboard() {
                     name="section"
                     value={formData.section}
                     onChange={handleInputChange}
-                    className=" py-3  rounded-md text-xs"
+                    className=" py-3  rounded-md text-xs bg-background border border-blue-950"
                   >
                     <option value="">Select your section...</option>
                     <option value="Zoom and Playback">Zoom and Playback</option>
@@ -560,10 +560,11 @@ export default function Dashboard() {
             <Image
               src={Logo}
               alt="Image"
-              width={25}
+              width={20}
+              h
               className="  object-cover  "
             />
-            <p className="text-lg font-semibold"> DCLM</p>
+            <p className="text-sm font-semibold"> DCLM</p>
           </div>
 
           <p className="text-sm ">

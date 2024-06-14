@@ -34,22 +34,17 @@ export default function Dashboard() {
 
         // Save the token to a cookie
         Cookies.set("token", response.data.token, { expires: 7 }); // Expires in 7 days
-
-        // Redirect to dashboard
         router.push("/home");
       } else {
         toast.error("Error logging in");
         console.error("Error logging in");
       }
     } catch (err) {
+      toast.error("Invalid Credentials");
       console.error(err);
     }
   };
 
-  const Login = (e) => {
-    e.preventDefault();
-    console.log(user);
-  };
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 ">
       <div className="hidden bg-muted lg:flex items-center justify-center">
@@ -61,7 +56,7 @@ export default function Dashboard() {
         />
       </div>
       <div className="flex items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
+        <div className="mx-auto grid lg:w-[350px]  max-w-[300px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">

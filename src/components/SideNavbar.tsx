@@ -43,16 +43,7 @@ export default function SideNavbar({}: Props) {
         </div>
       )}
       <div className="flex  items-center justify-center gap-1 mb-3">
-        <Image
-          src={Logo}
-          alt="logo"
-          style={{ width: 70, height: 70 }}
-          className=" 
-          "
-        />
-        {/* <p className="text-sm font-bold ">
-          DCLM 
-        </p> */}
+        <Image src={Logo} alt="logo" style={{ width: 70, height: 70 }} />
       </div>
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
@@ -85,6 +76,12 @@ export default function SideNavbar({}: Props) {
             title: "Settings",
             href: "/settings",
             icon: Settings,
+            variant: "ghost",
+          },
+          {
+            title: "Admin",
+            href: "/admins",
+            icon: ShoppingCart,
             variant: "ghost",
           },
         ]}
